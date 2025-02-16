@@ -53,65 +53,6 @@ This project is a backend API to manage conversations with a Language Model (LLM
 - [Docker Compose](https://docs.docker.com/compose/install/) installed.
 - (Optional) [Git](https://git-scm.com/) for cloning the repository.
 
----
-
-## Installation and Setup
-
-1. **Clone the Repository:**
-   ```bash
-   git clone <repository-url>
-   cd <repository-directory>
-
-
-   # LLM Conversations API Backend
-
-This repository contains the backend component of the LLM Conversations API. It is built using **FastAPI**, **Pydantic**, **Beanie** (with Motor), and integrates with the **OpenAI** Python client. The backend provides CRUD operations for conversations (which include a history of user prompts and LLM responses) as well as auditing with anonymization of PII. The project is containerized using **Docker** and uses a **MongoDB** instance running in a Docker container.
-
----
-
-## Table of Contents
-
-- [LLM Conversations API](#llm-conversations-api)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Technologies](#technologies)
-  - [Prerequisites](#prerequisites)
-  - [Installation and Setup](#installation-and-setup)
-  - [Environment Variables](#environment-variables)
-  - [Running the Application](#running-the-application)
-    - [Using Docker Compose](#using-docker-compose)
-    - [Running Locally Without Docker](#running-locally-without-docker)
-  - [API Documentation](#api-documentation)
-  - [Running Tests](#running-tests)
-
----
-
-## Features
-
-- **Conversations CRUD:**  
-  Create, read, update, and delete conversations that store a history of messages (user prompts and LLM responses).
-
-- **LLM Integration:**  
-  Send a prompt to an LLM (via OpenAI's ChatCompletion API) and receive responses using conversation context.
-
-- **Message Operations:**  
-  In addition to conversation-level operations, manage individual messages (creation and update) within a conversation.
-
-- **Audit Logging with PII Masking:**  
-  Audit logs are created for each LLM interaction with PII (such as email addresses and phone numbers) masked. Only a portion (e.g., last 2000 characters) is stored.
-
-- **Dockerized Environment:**  
-  The backend and MongoDB are fully containerized with Docker and Docker Compose for a consistent and reproducible setup.
-
----
-
-## Prerequisites
-
-Ensure you have the following installed on your system:
-
-- [Docker](https://www.docker.com/get-started)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-- (Optional) [Git](https://git-scm.com/)
 
 ---
 
@@ -199,5 +140,5 @@ Tests are written using pytest and pytest-asyncio. To run the tests:
 The test suite covers CRUD operations for conversations, message operations, LLM prompt sending, and error handling.
 
 
-
-
+---
+If you have any queries, please feel free to contact me at hcm@u.nus.edu
