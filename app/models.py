@@ -26,7 +26,7 @@ class Conversation(Document):
 
     def add_message(self, message: Message):
         self.messages.append(message)
-        self.updated_at = lambda: datetime.now(timezone.utc)
+        self.updated_at=datetime.now(timezone.utc)
 
 class AuditLog(Document):
     og_id: str = Field(default_factory=lambda: str(uuid4()))
