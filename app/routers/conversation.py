@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from beanie import PydanticObjectId
 from fastapi import APIRouter, HTTPException, status
 from typing import List
@@ -5,7 +6,8 @@ from typing import List
 from app.models import Conversation, Message
 from app.schemas import (
     ConversationCreate,
-    ConversationResponse
+    ConversationResponse,
+    ConversationUpdate
 )
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
@@ -28,13 +30,45 @@ async def get_conversation(conversation_id: str):
     try:
         obj_id = PydanticObjectId(conversation_id)
     except:
-        # If it's not a valid ObjectId, we just say "not found" (or 412, up to you)
         raise HTTPException(status_code=404, detail="Conversation not found")
 
     conv = await Conversation.get(obj_id)
     if not conv:
         raise HTTPException(status_code=404, detail="Conversation not found")
     return await _build_conversation_response(conv)
+
+@router.put("/{conversation_id}", response_model=ConversationResponse)
+async def update_conversation(conversation_id: str, conv_update: ConversationUpdate):
+    try:
+        obj_id = PydanticObjectId(conversation_id)
+    except:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+
+    conv = await Conversation.get(obj_id)
+    if not conv:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+
+    if conv_update.title is not None:
+        conv.title = conv_update.title
+
+    conv.updated_at = datetime.now(timezone.utc)
+    await conv.save()
+    return await _build_conversation_response(conv)
+
+
+@router.delete("/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_conversation(conversation_id: str):
+    try:
+        obj_id = PydanticObjectId(conversation_id)
+    except:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+
+    conv = await Conversation.get(obj_id)
+    if not conv:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    await conv.delete()
+    return
+
 
 async def _build_conversation_response(conv: Conversation) -> ConversationResponse:
     return ConversationResponse(

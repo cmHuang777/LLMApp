@@ -24,7 +24,7 @@ async def clear_db():
 def test_list_conversations(clear_db):
     """
     Test listing conversations returns an empty list initially,
-    then one after creation.
+    then one after creation. Empty list test requires an empty database.
     """
     # Initially empty
     with TestClient(app) as client:
@@ -77,4 +77,45 @@ def test_get_conversation(clear_db):
         # Non-existent
         bad_resp = client.get("/conversations/bad_id")
         assert bad_resp.status_code == 404
+
+def test_update_conversation(clear_db):
+    """
+    Test updating the conversation title.
+    """
+    with TestClient(app) as client:
+        # Create
+        create_resp = client.post("/conversations/", json={"title": "Old Title"})
+        conv_id = create_resp.json()["id"]
+
+        # Update
+        update_resp = client.put(f"/conversations/{conv_id}", json={"title": "New Title"})
+        assert update_resp.status_code == 200
+        updated_data = update_resp.json()
+        assert updated_data["title"] == "New Title"
+
+        # Check invalid ID
+        invalid_resp = client.put("/conversations/bad_id", json={"title": "Doesn't matter"})
+        assert invalid_resp.status_code == 404
+
+
+def test_delete_conversation(clear_db):
+    """
+    Test deleting a conversation.
+    """
+    with TestClient(app) as client:
+        # Create
+        create_resp = client.post("/conversations/", json={"title": "ToDelete"})
+        conv_id = create_resp.json()["id"]
+
+        # Delete
+        del_resp = client.delete(f"/conversations/{conv_id}")
+        assert del_resp.status_code == 204
+
+        # Try get
+        get_resp = client.get(f"/conversations/{conv_id}")
+        assert get_resp.status_code == 404
+
+        # Try delete nonexistent
+        invalid_resp = client.delete("/conversations/bad_id")
+        assert invalid_resp.status_code == 404
 
