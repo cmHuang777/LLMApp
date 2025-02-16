@@ -9,5 +9,5 @@ MONGO_DETAILS = settings.MONGO_URI
 async def init_db():
     client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
     # Using the default database from the connection string
-    db = client.get_default_database()
+    db = client[settings.MONOGO_DB_NAME]
     await init_beanie(database=db, document_models=[Conversation, AuditLog])

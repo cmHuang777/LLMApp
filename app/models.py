@@ -15,7 +15,7 @@ class Message(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class Conversation(Document):
-    conversation_id: str = Field(default_factory=lambda: datetime.now(timezone.utc))
+    conversation_id: str = Field(default_factory=lambda: str(uuid4()))
     title: str
     messages: List[Message] = []
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
