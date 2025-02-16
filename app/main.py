@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.database import init_db
 from .config import settings
-from app.routers import conversation
+from app.routers import audit, conversation
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,3 +24,4 @@ async def root():
 
 # print(f"DEBUG: MONGO_URI = {settings.MONGO_URI}")
 app.include_router(conversation.router)
+app.include_router(audit.router)
